@@ -29,4 +29,18 @@ BooksService.prototype.getAllBooksWithContent = function(content){
     return this.booksRepository.findAllBooksWithContent(content);
 };
 
+BooksService.prototype.getBooksWithMetadata = function(tags){
+    var entries = tags.split(",");
+    if(!entries || entries.length < 1 || !tags.includes(":")){
+        return Promise.reject({ noTags: true });
+    }
+    
+    var kvArray = entries.map(function(entry){
+        var vals = entry.split(":"); //this will break if the value or key text has a ":"" in it
+        return { key: vals[0], value: vals[1] };
+    });
+    
+    return this.booksRepository.findAllBooksWithMetadata(kvArray);
+};
+
 module.exports = BooksService;

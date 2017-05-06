@@ -9,7 +9,7 @@ function BooksRepository(bookModel){
     //seed data
     for(var i=1; i<= 10000; i++){
         booksMap.set(i, new bookModel(i, "bookTitle" + i, "authorFirstName" + i, "authorLastName" +i, "content" +i, 
-        {tag : i}, getRandomCategory(), new Date(99, 5, 24), getRandomLanguage()));
+        {"country" : getrandomCountry(), tag : i }, getRandomCategory(), new Date(99, 5, 24), getRandomLanguage()));
     }
     
 }
@@ -54,6 +54,27 @@ function getRandomLanguage(){
     //"ENGLISH", "CHINESE", "RUSSIAN", and "SPANISH"
     return "ENGLISH";
 }
+
+function getrandomCountry(){
+    var rando = getRandomNumberBetween0and3();
+    
+    if(rando === 0){
+        return "ENGLAND";
+    }
+    if(rando === 1){
+        return "USA";
+    }
+    if(rando === 2){
+        return "RUSSIA";
+    }
+    if(rando === 3){
+        return "MEXICO";
+    }
+    
+    //"ENGLISH", "CHINESE", "RUSSIAN", and "SPANISH"
+    return "SPAIN";
+}
+
 
 function getRandomNumberBetween0and3(){
     return Math.floor(Math.random() * 4);
@@ -112,6 +133,37 @@ BooksRepository.prototype.findAllBooksWithContent = function(content){
     }
     
     return Promise.resolve(books);
+};
+
+
+BooksRepository.prototype.findAllBooksWithMetadata = function(metadataArray){
+    
+    var books =[];
+    
+    for (var book of booksMap.values()) {
+        
+        var includeBook = true;
+        
+        for(var kv of metadataArray){
+            if(!book.metadata_tags.hasOwnProperty(kv.key)){
+                includeBook = false;
+                break;
+            }
+            
+            if(book.metadata_tags[kv.key] != kv.value){
+                includeBook = false;
+                break;
+            }
+        } 
+        
+        if(includeBook){
+            books.push(book);
+        }
+        
+    }
+    
+    return Promise.resolve(books);
+    
 }
 
 

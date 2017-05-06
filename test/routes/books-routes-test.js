@@ -167,6 +167,43 @@ describe("Books routes", function() {
     });
     
     
+    it("should return error for missing tags in search by metadata", function(done){
+        supertest(app)
+                .get('/api/v1/books/metadata')
+                .send()
+                .expect(400)
+                .end(function(err, res){
+                    assert.equal(res.body.success, false);
+                    assert.equal(res.body.errorCode, container.booksErrors.MISSING_TAGS.errorCode);
+                    done();
+                });
+    });
+    
+    
+    it("should return 500 error for malformed tags in search by metadata", function(done){
+        supertest(app)
+                .get('/api/v1/books/metadata')
+                .query({ tags : "tags123" })
+                .send()
+                .expect(500)
+                .end(function(err, res){
+                    done();
+                });
+    });
+    
+    it("should return an array for matching metadata tags", function(done){
+        supertest(app)
+                .get('/api/v1/books/metadata')
+                .query({ tags : "tag:1" })
+                .send()
+                .expect(200)
+                .end(function(err, res){
+                    assert.equal(res.body.success, true);
+                    assert.equal(res.body.data.length, 1);
+                    done();
+                });
+    });
+    
     
     
 })

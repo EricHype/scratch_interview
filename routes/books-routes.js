@@ -35,7 +35,7 @@ module.exports = function(apiRoutes, booksService, booksErrors){
     }
     
     
-    apiRoutes.get("/api/v1/books/content", getBooksByContent)
+    apiRoutes.get("/api/v1/books/content", getBooksByContent);
     
     function getBooksByContent(req, res){
         
@@ -46,6 +46,23 @@ module.exports = function(apiRoutes, booksService, booksErrors){
          booksService.getAllBooksWithContent(req.query.contentText)
         .then(function(books){
             return res.json({ success: true, message: "Content Search Complete", data: books});
+        })
+        .catch(function(err){
+            return res.status(500).json(err);
+        });
+    }
+    
+    //for this example we'll assume tags are in "key1:val1,key2:val2,..." in querystring
+    apiRoutes.get("/api/v1/books/metadata", getBooksByMetadata);
+    
+    function getBooksByMetadata(req, res){
+        if(!req.query.tags){
+            return res.status(400).json(booksErrors.MISSING_TAGS);
+        }
+        
+        booksService.getBooksWithMetadata(req.query.tags)
+        .then(function(books){
+            return res.json({ success: true, message: "Metadata Search Complete", data: books});
         })
         .catch(function(err){
             return res.status(500).json(err);
