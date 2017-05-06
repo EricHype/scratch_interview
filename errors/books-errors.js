@@ -1,6 +1,7 @@
 var errors = {}
 
-
+errors.MISSING_CATEGORIES = { success: false, errorCode: "BOOK105", 
+    message: "Parameter categories required" };
 errors.MISSING_CONTENT = { success: false, errorCode: "BOOK103", 
     message: "Parameter contentText required" };
 errors.MISSING_FIRSTNAME_LASTNAME = { success: false, errorCode: "BOOK100", 

@@ -69,6 +69,22 @@ module.exports = function(apiRoutes, booksService, booksErrors){
         });
     }
     
+    apiRoutes.get("/api/v1/books/category", getBooksByCategory);
+    
+    function getBooksByCategory(req, res){
+        if(!req.query.categories){
+            return res.status(400).json(booksErrors.MISSING_CATEGORIES);
+        }
+        
+        booksService.getBooksWithCategories(req.query.categories)
+        .then(function(books){
+            return res.json({ success: true, message: "Categories Search Complete", data: books});
+        })
+        .catch(function(err){
+            return res.status(500).json(err);
+        });
+    }
+    
     
     apiRoutes.get('/api/v1/books/:id', getBookById);
     

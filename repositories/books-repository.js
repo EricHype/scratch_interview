@@ -164,7 +164,30 @@ BooksRepository.prototype.findAllBooksWithMetadata = function(metadataArray){
     
     return Promise.resolve(books);
     
-}
+};
+
+BooksRepository.prototype.findAllBooksByCategories = function(categories){
+    
+    var books = [];
+    
+    for(var book of booksMap.values()){
+        
+        var includeBook = false;
+        
+        for(var cat of categories){
+            if(cat == book.category){
+                includeBook = true;
+            }
+        }
+        
+        if(includeBook){
+            books.push(book);
+        }
+        
+    }
+    
+    return Promise.resolve(books);
+};
 
 
 module.exports = BooksRepository;

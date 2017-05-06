@@ -43,4 +43,10 @@ BooksService.prototype.getBooksWithMetadata = function(tags){
     return this.booksRepository.findAllBooksWithMetadata(kvArray);
 };
 
+BooksService.prototype.getBooksWithCategories = function(categories){
+    var catArr = categories.toUpperCase().split(",");
+    return this.booksRepository.findAllBooksByCategories(catArr);
+};
+
+
 module.exports = BooksService;

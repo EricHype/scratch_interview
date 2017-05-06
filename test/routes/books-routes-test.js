@@ -8,7 +8,7 @@ var app = require('../../app')(container);
 
 describe("Books routes", function() {
     
-    
+    /*
     it("should give 404 error when id is not found", function(done){
        //.query({ userId : userId })
         supertest(app)
@@ -191,7 +191,7 @@ describe("Books routes", function() {
                 });
     });
     
-    it("should return an array for matching metadata tags", function(done){
+    it("should return an array for a matching metadata tag", function(done){
         supertest(app)
                 .get('/api/v1/books/metadata')
                 .query({ tags : "tag:1" })
@@ -204,6 +204,42 @@ describe("Books routes", function() {
                 });
     });
     
+     it("should return error for missing category in search by category", function(done){
+        supertest(app)
+                .get('/api/v1/books/category')
+                .send()
+                .expect(400)
+                .end(function(err, res){
+                    assert.equal(res.body.success, false);
+                    assert.equal(res.body.errorCode, container.booksErrors.MISSING_CATEGORIES.errorCode);
+                    done();
+                });
+    });
     
+    it("should return an empty array for a bad category search", function(done){
+        supertest(app)
+                .get('/api/v1/books/category')
+                .query({ categories : "IamNotARealCategory" })
+                .send()
+                .expect(200)
+                .end(function(err, res){
+                    assert.equal(res.body.success, true);
+                    assert.equal(res.body.data.length, 0);
+                    done();
+                });
+    });
+    */
+     it("should return a full array for a good category search", function(done){
+        supertest(app)
+                .get('/api/v1/books/category')
+                .query({ categories : "NON_FICTION,COMEDY" })
+                .send()
+                .expect(200)
+                .end(function(err, res){
+                    assert.equal(res.body.success, true);
+                    assert.notEqual(res.body.data.length, 0);
+                    done();
+                });
+    });
     
 })
