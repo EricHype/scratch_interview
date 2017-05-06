@@ -12,4 +12,17 @@ BooksService.prototype.getBookById = function(bookId){
     return this.booksRepository.findBookById(bookId);
 };
 
+
+BooksService.prototype.getAllBooks = function(){
+    return this.booksRepository.findAllBooks();
+};
+
+BooksService.prototype.getAllBooksForAuthor = function(firstName, lastName){
+    return this.booksRepository.findBooksByAuthor(firstName, lastName);   
+};
+
+BooksService.prototype.getAllBooksForTitle = function(titleText){
+    return this.booksRepository.findAllBooksByTitle(titleText);
+};
+
 module.exports = BooksService;

@@ -14,7 +14,7 @@ describe("Books routes", function() {
         supertest(app)
                 .get('/api/v1/books/999999999')
                 .send()
-                .expect(400)
+                .expect(404)
                 .end(function(err, res){
                     assert.equal(res.body.success, false);
                     assert.equal(res.body.errorCode, container.booksErrors.BAD_ID.errorCode);
@@ -28,7 +28,7 @@ describe("Books routes", function() {
         supertest(app)
                 .get('/api/v1/books/2')
                 .send()
-                .expect(400)
+                .expect(200)
                 .end(function(err, res){
                     assert.equal(res.body.success, true);
                     assert.notEqual(null, res.body.data);
@@ -36,5 +36,96 @@ describe("Books routes", function() {
                     done();
                 });
     });
+    
+    it("should throw an error response when firstName is missing in author search", function(done){
+        supertest(app)
+                .get('/api/v1/books/author')
+                .query({ lastName : "Smith" })
+                .send()
+                .expect(400)
+                .end(function(err, res){
+                    assert.equal(res.body.success, false);
+                    assert.equal(res.body.errorCode, container.booksErrors.MISSING_FIRSTNAME_LASTNAME.errorCode);
+                    done();
+                });
+    });
+    
+    it("should throw an error response when lastName is missing in author search", function(done){
+        supertest(app)
+                .get('/api/v1/books/author')
+                .query({ firstName : "John" })
+                .send()
+                .expect(400)
+                .end(function(err, res){
+                    assert.equal(res.body.success, false);
+                    assert.equal(res.body.errorCode, container.booksErrors.MISSING_FIRSTNAME_LASTNAME.errorCode);
+                    done();
+                });
+    });
+    
+    it("should return an empty array for an unknown author in author search", function(done){
+        supertest(app)
+                .get('/api/v1/books/author')
+                .query({ firstName : "John", lastName : "Smith" })
+                .send()
+                .expect(200)
+                .end(function(err, res){
+                    assert.equal(res.body.success, true);
+                    assert.equal(res.body.data.length, 0);
+                    done();
+                });
+    });
+    
+     it("should return an array for a known author in author search", function(done){
+        supertest(app)
+                .get('/api/v1/books/author')
+                .query({ firstName : "authorFirstName1", lastName : "authorLastName1" })
+                .send()
+                .expect(200)
+                .end(function(err, res){
+                    assert.equal(res.body.success, true);
+                    assert.equal(res.body.data.length, 1);
+                    done();
+                });
+    });
+    
+    it("should return error for missing title text in search by title", function(done){
+        supertest(app)
+                .get('/api/v1/books/title')
+                .send()
+                .expect(400)
+                .end(function(err, res){
+                    assert.equal(res.body.success, false);
+                    assert.equal(res.body.errorCode, container.booksErrors.MISSING_TITLE.errorCode);
+                    done();
+                });
+    });
+    
+    it("should return an empty array for a bad title text search", function(done){
+        supertest(app)
+                .get('/api/v1/books/title')
+                .query({ titleText : "IamNotARealTitle" })
+                .send()
+                .expect(200)
+                .end(function(err, res){
+                    assert.equal(res.body.success, true);
+                    assert.equal(res.body.data.length, 0);
+                    done();
+                });
+    });
+    
+    it("should return an array for a good title text search", function(done){
+        supertest(app)
+                .get('/api/v1/books/title')
+                .query({ titleText : "bookTitle10" })
+                .send()
+                .expect(200)
+                .end(function(err, res){
+                    assert.equal(res.body.success, true);
+                    assert.equal(res.body.data.length, 112);
+                    done();
+                });
+    });
+    
     
 })

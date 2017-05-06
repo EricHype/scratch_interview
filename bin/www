@@ -1,6 +1,5 @@
 
 var Promise = require('bluebird');
-var config = require('../config/config');
 
 
 var containerDef = require('../dependency/container');
