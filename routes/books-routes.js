@@ -35,6 +35,24 @@ module.exports = function(apiRoutes, booksService, booksErrors){
     }
     
     
+    apiRoutes.get("/api/v1/books/content", getBooksByContent)
+    
+    function getBooksByContent(req, res){
+        
+        if(!req.query.contentText){
+            return res.status(400).json(booksErrors.MISSING_CONTENT);
+        }
+        
+         booksService.getAllBooksWithContent(req.query.contentText)
+        .then(function(books){
+            return res.json({ success: true, message: "Content Search Complete", data: books});
+        })
+        .catch(function(err){
+            return res.status(500).json(err);
+        });
+    }
+    
+    
     apiRoutes.get('/api/v1/books/:id', getBookById);
     
     function getBookById(req, res){

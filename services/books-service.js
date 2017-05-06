@@ -25,4 +25,8 @@ BooksService.prototype.getAllBooksForTitle = function(titleText){
     return this.booksRepository.findAllBooksByTitle(titleText);
 };
 
+BooksService.prototype.getAllBooksWithContent = function(content){
+    return this.booksRepository.findAllBooksWithContent(content);
+};
+
 module.exports = BooksService;

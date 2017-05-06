@@ -102,5 +102,17 @@ BooksRepository.prototype.findAllBooksByTitle = function(title){
     
 };
 
+BooksRepository.prototype.findAllBooksWithContent = function(content){
+    var books = [];
+    
+    for (var book of booksMap.values()) {
+        if(book.content.includes(content)){ 
+            books.push(book);
+        }
+    }
+    
+    return Promise.resolve(books);
+}
+
 
 module.exports = BooksRepository;

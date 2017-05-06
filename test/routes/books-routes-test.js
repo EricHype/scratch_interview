@@ -128,4 +128,45 @@ describe("Books routes", function() {
     });
     
     
+    it("should return error for missing content text in search by content", function(done){
+        supertest(app)
+                .get('/api/v1/books/content')
+                .send()
+                .expect(400)
+                .end(function(err, res){
+                    assert.equal(res.body.success, false);
+                    assert.equal(res.body.errorCode, container.booksErrors.MISSING_CONTENT.errorCode);
+                    done();
+                });
+    });
+    
+    it("should return an empty array for a bad content search", function(done){
+        supertest(app)
+                .get('/api/v1/books/content')
+                .query({ contentText : "IamNotARealContent" })
+                .send()
+                .expect(200)
+                .end(function(err, res){
+                    assert.equal(res.body.success, true);
+                    assert.equal(res.body.data.length, 0);
+                    done();
+                });
+    });
+    
+    it("should return an array for a good content search", function(done){
+        supertest(app)
+                .get('/api/v1/books/content')
+                .query({ contentText : "content10" })
+                .send()
+                .expect(200)
+                .end(function(err, res){
+                    assert.equal(res.body.success, true);
+                    assert.equal(res.body.data.length, 112);
+                    done();
+                });
+    });
+    
+    
+    
+    
 })
