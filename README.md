@@ -28,6 +28,8 @@ I don't think whitespace seperated names are a great way to go in general, parti
 
 The type of client for this API was never specified so I'm assuming dates can come in millisecond timestamp format vs user-input mm/dd/yyyy format.
 
+RAM of server and processor speed are also not defined, so I could technically assume they are unbounded/limitless. 
+
 # 3) TL/DR or how do I run it?
 
 - Make sure you have the latest version of node / npm
@@ -48,3 +50,15 @@ The type of client for this API was never specified so I'm assuming dates can co
 
 (Multi parameter search)
 - /api/v1/books/search - Parameters: firstName, lastName, titleText, contentText, tags, categories, publishedDate, operator, languages, pageNumber, pageSize, limit, sortKeys. Formats are same as above, sortkeys should be in "column:asc,column2:desc" format.
+
+# 5) Things still to do/code stuff I'm not that happy with.
+
+This implementation is laregly a brute force one, given the nebulous nature of the problem, which is massively inefficient. Seriously, it took me a full day of working on it and re-reading the problem before I finally figured out what Scratch was probably trying to have me code so they could evaluate. Sadly, by that time, I had already put a lot of hours into the single-parameter routes and the tests that go with them, so I ended up shorting what was probably the more important stuff they'd like to see in the multi-parameter route and backing repository. Really wish I had understood better or the problem was written more clearly.
+
+The service class violated the single object responsibility principle, so I'd love to refactor that. Additionally, I'd like ot add in memory indexes on the collection for different columns to speed up searches. It's not hard to get a pretty decent speed gain over the simple iterate-over-whole-collection version I did as an initial implementation. 
+
+Lastly, this is a solution that could greatly benefit from caching, particularly if the pagination feature is heavily used.
+
+# 6) If this was to be deployed as a service
+
+Part of the problem is say what you wold do if this solution were to be deployed as a service that added 100 books per second and had to handle 50k searches per second. Flatly, I wouldn't ship anything like this to handle that problem. There are way better, well understood and industry standard tools like elasticsearch/solr that can handle something like this and the benefits of using them far outweigh the costs. HOwever, if I had to ship this
