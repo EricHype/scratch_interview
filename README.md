@@ -30,7 +30,7 @@ The type of client for this API was never specified so I'm assuming dates can co
 
 RAM of server and processor speed are also not defined, so I could technically assume they are unbounded/limitless. 
 
-# 3) TL/DR or how do I run it?
+# 3) How do I run it?
 
 - Make sure you have the latest version of node / npm
 - clone repository
