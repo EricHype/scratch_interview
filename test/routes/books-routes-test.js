@@ -269,4 +269,89 @@ describe("Books routes", function() {
                 });
     });
     
+    
+    
+    //ok given I've written all the above tests, unfortunately I'm goingoot end up skimping on the search tests 
+    //for time constraints. My fault for misunderstanding the problem.
+    
+    /* Let's implement the sample test cases
+    Get at most 10 books that are either in English or Russian
+    Get all books that are “non-fiction” AND in ( English or Russian )
+    Get all books that are “non-fiction” AND in English by “Vladimir Nabokov”
+    Get all books with tag “country” == “UK”
+    */
+
+    it("should get 10 books in either english or russian", function(done){
+            supertest(app)
+                    .get('/api/v1/books/search')
+                    .query({ languages : "ENGLISH,RUSSIAN", limit: 10 })
+                    .send()
+                    .expect(200)
+                    .end(function(err, res){
+                        assert.equal(res.body.success, true);
+                        assert.equal(res.body.data.length, 10);
+                        
+                        for(var book of res.body.data){
+                            if(book.language != "ENGLISH" && book.language != "RUSSIAN"){
+                                assert.fail();
+                            }
+                        }
+                        
+                        done();
+                    });
+    });
+    
+    it("should get all non-fiction books in either english or russian", function(done){
+            supertest(app)
+                    .get('/api/v1/books/search')
+                    .query({ languages : "ENGLISH,RUSSIAN", categories: "NON_FICTION" })
+                    .send()
+                    .expect(200)
+                    .end(function(err, res){
+                        assert.equal(res.body.success, true);
+                        assert.notEqual(res.body.data.length, 0);
+                        
+                        for(var book of res.body.data){
+                            if( (book.language != "ENGLISH" && book.language != "RUSSIAN") 
+                                || book.category != "NON_FICTION"){
+                                assert.fail();
+                            }
+                        }
+                        
+                        done();
+                    });
+    });
+    
+    it("should get all non-fiction books by a specific author", function(done){
+            supertest(app)
+                    .get('/api/v1/books/search')
+                    .query({ categories: "NON_FICTION", authorFirstName: "VlaDamir", authorLastName: "NobokeV" })
+                    .send()
+                    .expect(200)
+                    .end(function(err, res){
+                        assert.equal(res.body.success, true);
+                        assert.notEqual(res.body.data.length, 1);
+                        done();
+                    });
+    });
+    
+    it("should get all books in a country", function(done){
+        supertest(app)
+                    .get('/api/v1/books/search')
+                    .query({ tags : "country:MEXICO" })
+                    .send()
+                    .expect(200)
+                    .end(function(err, res){
+                        assert.equal(res.body.success, true);
+                        assert.notEqual(res.body.data.length, 0);
+                        
+                        for(var book of res.body.data){
+                            if(book.metadata_tags.country != "MEXICO"){
+                                assert.fail();
+                            }
+                        }
+                        
+                        done();
+                    });
+    });
 })

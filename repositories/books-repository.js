@@ -13,6 +13,10 @@ function BooksRepository(bookModel){
         new Date(99, 5, getRandomNumberBetween1and27()), getRandomLanguage()));
     }
     
+    booksMap.set(10001, new bookModel(i, "Vlad's #1 non fiction", "Vladamir", "Nobokev", "So I says to mabel I says...", 
+        {"country" : "RUSSIA", tag : 10001 }, "NON_FICTION", 
+        new Date(99, 5, 12), "RUSSIAN"));
+    
 }
 
 function getRandomCategory(){
@@ -269,5 +273,124 @@ BooksRepository.prototype.findAllBooksByLanguages = function(languages){
     
     return Promise.resolve(books);
 };
+
+BooksRepository.prototype.findAllBooksByCriteria = function(firstName, lastName, titleText, contentText,
+        tags, categories, publishedDate, operator, languages){
+  
+  var books = [];
+  for(var book of booksMap.values()){
+  
+      if(firstName && lastName){
+          if(book.author.firstName.toLowerCase() != firstName.toLowerCase || 
+            book.author.lastName.toLowerCase() != lastName.toLowerCase){
+              continue;
+          }
+      }
+      
+      if(titleText){
+          if(!book.title.includes(titleText)){
+              continue;
+          }
+      }
+      
+      if(contentText){
+          if(!book.content.includes(contentText)){
+              continue;
+          }
+      }
+      
+      if(tags){
+          if(!containsMatchingTag(book, tags)){
+              continue;
+          }
+      }
+      
+      if(categories){
+          if(!containsCategory(book, categories)){
+              continue;
+          }
+      }
+      
+      if(publishedDate && operator){
+          if(!containsPublishDate(book, publishedDate, operator)){
+              continue;
+          }
+      }
+      
+      if(languages){
+          if(!containsLanguages(book, languages)){
+              continue;
+          }
+      }
+      
+      books.push(book);
+      
+  }
+  
+  return Promise.resolve(books);
+  
+};
+
+
+function containsMatchingTag(book,tagsArray){
+    for(var kv of tagsArray){
+        if(!book.metadata_tags.hasOwnProperty(kv.key)){
+            return false;
+        }
+        
+        if(book.metadata_tags[kv.key] != kv.value){
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+function containsCategory(book, categories){
+    for(var cat of categories){
+            if(cat == book.category){
+                return true;
+            }
+        }
+        
+    return false;
+}
+
+function containsLanguages(book, languages){
+    for(var lang of languages){
+            if(lang == book.language){
+                return true;
+            }
+        }
+        
+    return false;
+}
+
+function containsPublishDate(book, publishDate, operator){
+    var func_op = null;
+    
+    switch(operator){
+        case "<":
+            func_op = published_lt;
+            break;
+        case ">":
+            func_op = published_gt;
+            break;
+        case "==":
+            func_op = published_equals;
+            break;
+        case ">=":
+            func_op = published_ge;
+            break;
+        case "<=":
+            func_op = published_le;
+            break;
+        default:
+            return false;
+    }
+    
+    
+    return func_op(book.published_date, publishDate);
+}
 
 module.exports = BooksRepository;

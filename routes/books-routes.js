@@ -116,7 +116,43 @@ module.exports = function(apiRoutes, booksService, booksErrors){
         
     }
     
-    
+    apiRoutes.get("/api/v1/books/search", getBooksBySearch);
+    function getBooksBySearch(req, res){
+        
+        //criteria
+        if(!req.query.firstName && !req.query.lastName && !req.query.titleText 
+            && !req.query.contentText && !req.query.tags && !req.query.categories
+            && !req.query.publishedDate && !req.query.operator
+            && !req.query.languages){
+            
+            return res.status(400).json(booksErrors.MISSING_CRITERIA);
+        }
+        
+        if((req.query.firstName && !req.query.lastName) || (!req.query.firstName && req.query.lastName)){
+            return res.status(400).json(booksErrors.MISSING_FIRSTNAME_LASTNAME);
+        }
+        
+        if((req.query.publishedDate && !req.query.operator) || (!req.query.publishedDate && req.query.operator)){
+            return res.status(400).json(booksErrors.MISSING_PUBLISH);
+        }
+        
+        //paging
+        if((req.query.pageSize && !req.query.pageNumber) || (!req.query.pageSize && req.query.pageNumber)){
+            return res.status(400).json(booksErrors.MISSING_PAGINATION);
+        }
+        
+        booksService.getBooksByParameters(req.query.firstName, req.query.lastName, req.query.titleText, 
+            req.query.contentText, req.query.tags, req.query.categories, req.query.publishedDate, req.query.operator,
+            req.query.languages, req.query.pageSize, req.query.pageNumber, req.query.limit, req.query.sortKeys)
+        .then(function(books){
+            return res.json({ success: true, message: "Criteria Search Complete", data: books});
+        })
+        .catch(function(err){
+            return res.status(500).json(err);
+        });    
+        
+        
+    }
     
     apiRoutes.get('/api/v1/books/:id', getBookById);
     
