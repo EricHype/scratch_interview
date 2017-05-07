@@ -36,6 +36,7 @@ RAM of server and processor speed are also not defined, so I could technically a
 - clone repository
 - npm install 
 - node bin/www
+- navigate to http://localhost:3000/api/v1/books/1 to try it out.
 
 # 4) Routes:
 
