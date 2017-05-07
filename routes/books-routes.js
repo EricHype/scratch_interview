@@ -100,6 +100,22 @@ module.exports = function(apiRoutes, booksService, booksErrors){
         });
     }
     
+    apiRoutes.get("/api/v1/books/language", getBooksByLanguage);
+    function getBooksByLanguage(req, res){
+        if(!req.query.languages){
+            return res.status(400).json(booksErrors.MISSING_LANGUAGES);
+        }
+        
+        booksService.getAllBooksByLanguages(req.query.languages)
+        .then(function(books){
+            return res.json({ success: true, message: "Language Search Complete", data: books});
+        })
+        .catch(function(err){
+            return res.status(500).json(err);
+        });
+        
+    }
+    
     
     
     apiRoutes.get('/api/v1/books/:id', getBookById);

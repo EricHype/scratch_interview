@@ -6,6 +6,8 @@ errors.MISSING_CONTENT = { success: false, errorCode: "BOOK103",
     message: "Parameter contentText required" };
 errors.MISSING_FIRSTNAME_LASTNAME = { success: false, errorCode: "BOOK100", 
     message: "Parameters firstName and lastName are required" };
+errors.MISSING_LANGUAGE = { success: false, errorCode: "BOOK107", 
+    message: "Parameter languages is required" };    
 errors.MISSING_PUBLISH = { success: false, errorCode: "BOOK106", 
     message: "Parameters publishedDate and operator are required" };
 errors.MISSING_TAGS = { success: false, errorCode: "BOOK104", 

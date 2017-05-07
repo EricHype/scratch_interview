@@ -255,4 +255,18 @@ describe("Books routes", function() {
                 });
     });
     
+    
+    it("should return a full array for a language search", function(done){
+        supertest(app)
+                .get('/api/v1/books/language')
+                .query({ languages : "ENGLISH,CHINESE" })
+                .send()
+                .expect(200)
+                .end(function(err, res){
+                    assert.equal(res.body.success, true);
+                    assert.notEqual(res.body.data.length, 0);
+                    done();
+                });
+    });
+    
 })

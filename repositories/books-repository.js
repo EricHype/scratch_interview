@@ -247,4 +247,27 @@ function published_gt(bookDate, desiredDate){
     return bookDate.getTime() > desiredDate.getTime();
 }
 
+
+BooksRepository.prototype.findAllBooksByLanguages = function(languages){
+    var books = [];
+    
+    for(var book of booksMap.values()){
+        
+        var includeBook = false;
+        
+        for(var lang of languages){
+            if(lang == book.language){
+                includeBook = true;
+            }
+        }
+        
+        if(includeBook){
+            books.push(book);
+        }
+        
+    }
+    
+    return Promise.resolve(books);
+};
+
 module.exports = BooksRepository;

@@ -59,4 +59,10 @@ BooksService.prototype.getAllBooksByPublishDate = function(publishDate, operator
    return this.booksRepository.findAllBooksByDate(date, operator);
 };
 
+BooksService.prototype.getAllBooksByLanguages = function(languages){
+    var langArr = languages.toUpperCase().split(",");
+    return this.booksRepository.findAllBooksByLanguages(langArr);
+};
+
+
 module.exports = BooksService;
