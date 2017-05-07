@@ -53,9 +53,11 @@ RAM of server and processor speed are also not defined, so I could technically a
 
 # 5) Things still to do/stuff I'm not that happy with.
 
-This implementation is laregly a brute force one, given the nebulous nature of the problem, which is massively inefficient. Seriously, it took me a full day of working on it and re-reading the problem before I finally figured out what Scratch was probably trying to have me code so they could evaluate. Sadly, by that time, I had already put a lot of hours into the single-parameter routes and the tests that go with them, so I ended up shorting what was probably the more important stuff they'd like to see in the multi-parameter route and backing repository. I really wish I had understood what was written better or the problem was written more clearly so I knew where to spend my time.
+This implementation is laregly a brute force one, given the nebulous nature of the problem, which is massively inefficient. Seriously, it took me a full day of working on it and re-reading the problem before I finally figured out what Scratch was probably trying to have me code so they could evaluate. 
 
-The service class violated the single object responsibility principle, so I'd love to refactor that. Additionally, I'd like ot add in memory indexes on the collection for different columns to speed up searches. It's not hard to get a pretty decent speed gain over the simple iterate-over-whole-collection version I did as an initial implementation. 
+Sadly, by the time I understood what the problem really wanted me to do, I had already put a lot of hours into the single-parameter routes and the tests that go with them. I unfortunately ended up shorting what was probably the more important stuff Scratch would like to see in the multi-parameter route and backing repository. I really wish I had understood what was written a bit better or that the problem was written more clearly so I knew where to spend my time.
+
+The service class violated the single object responsibility principle, so I'd love to refactor that. Additionally, I'd like to add in memory indexes on the collection to speed up searches. It's not hard to get a pretty decent speed gain over the simple iterate-over-whole-collection version I did as an initial implementation. 
 
 Lastly, this is a solution that could greatly benefit from caching, particularly if the pagination feature is heavily used.
 
