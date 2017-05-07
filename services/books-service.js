@@ -49,4 +49,14 @@ BooksService.prototype.getBooksWithCategories = function(categories){
 };
 
 
+BooksService.prototype.getAllBooksByPublishDate = function(publishDate, operator){
+    
+    var date = null;
+    if(!(publishDate instanceof Date)){
+        date = new Date(parseInt(publishDate));
+    }
+    
+   return this.booksRepository.findAllBooksByDate(date, operator);
+};
+
 module.exports = BooksService;

@@ -8,7 +8,7 @@ var app = require('../../app')(container);
 
 describe("Books routes", function() {
     
-    /*
+    
     it("should give 404 error when id is not found", function(done){
        //.query({ userId : userId })
         supertest(app)
@@ -228,11 +228,24 @@ describe("Books routes", function() {
                     done();
                 });
     });
-    */
+    
      it("should return a full array for a good category search", function(done){
         supertest(app)
                 .get('/api/v1/books/category')
                 .query({ categories : "NON_FICTION,COMEDY" })
+                .send()
+                .expect(200)
+                .end(function(err, res){
+                    assert.equal(res.body.success, true);
+                    assert.notEqual(res.body.data.length, 0);
+                    done();
+                });
+    });
+    
+    it("should return a full array for a publish date search", function(done){
+        supertest(app)
+                .get('/api/v1/books/published_date')
+                .query({ publishedDate : 927205200000, operator: ">=" })
                 .send()
                 .expect(200)
                 .end(function(err, res){

@@ -9,7 +9,8 @@ function BooksRepository(bookModel){
     //seed data
     for(var i=1; i<= 10000; i++){
         booksMap.set(i, new bookModel(i, "bookTitle" + i, "authorFirstName" + i, "authorLastName" +i, "content" +i, 
-        {"country" : getrandomCountry(), tag : i }, getRandomCategory(), new Date(99, 5, 24), getRandomLanguage()));
+        {"country" : getrandomCountry(), tag : i }, getRandomCategory(), 
+        new Date(99, 5, getRandomNumberBetween1and27()), getRandomLanguage()));
     }
     
 }
@@ -78,6 +79,10 @@ function getrandomCountry(){
 
 function getRandomNumberBetween0and3(){
     return Math.floor(Math.random() * 4);
+}
+
+function getRandomNumberBetween1and27(){
+    return Math.floor(Math.random() * 27) + 1;
 }
 
 
@@ -189,5 +194,57 @@ BooksRepository.prototype.findAllBooksByCategories = function(categories){
     return Promise.resolve(books);
 };
 
+BooksRepository.prototype.findAllBooksByDate = function(date, operator){
+
+var books = [];
+    
+    var func_op = null;
+    
+    switch(operator){
+        case "<":
+            func_op = published_lt;
+            break;
+        case ">":
+            func_op = published_gt;
+            break;
+        case "==":
+            func_op = published_equals;
+            break;
+        case ">=":
+            func_op = published_ge;
+            break;
+        case "<=":
+            func_op = published_le;
+            break;
+        default:
+            return Promise.reject({ inavlid_operator : true });
+    }
+    
+    for(var book of booksMap.values()){
+        if(func_op(book.published_date, date)){
+            books.push(book);
+        }
+    }
+    
+    return Promise.resolve(books);    
+    
+};
+
+//published date ( ==, <=, >=, > or <)
+function published_equals(bookDate, desiredDate){
+    return bookDate.getTime() == desiredDate.getTime();
+}
+function published_le(bookDate, desiredDate){
+    return bookDate.getTime() <= desiredDate.getTime();
+}
+function published_ge(bookDate, desiredDate){
+    return bookDate.getTime() >= desiredDate.getTime();
+}
+function published_lt(bookDate, desiredDate){
+    return bookDate.getTime() < desiredDate.getTime();
+}
+function published_gt(bookDate, desiredDate){
+    return bookDate.getTime() > desiredDate.getTime();
+}
 
 module.exports = BooksRepository;

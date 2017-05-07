@@ -85,6 +85,22 @@ module.exports = function(apiRoutes, booksService, booksErrors){
         });
     }
     
+    apiRoutes.get("/api/v1/books/published_date", getBooksByPublishedDate);
+    function getBooksByPublishedDate(req, res){
+        if(!req.query.publishedDate || !req.query.operator){
+            return res.status(400).json(booksErrors.MISSING_PUBLISH);
+        }
+        
+        booksService.getAllBooksByPublishDate(req.query.publishedDate, req.query.operator)
+        .then(function(books){
+            return res.json({ success: true, message: "Publish Search Complete", data: books});
+        })
+        .catch(function(err){
+            return res.status(500).json(err);
+        });
+    }
+    
+    
     
     apiRoutes.get('/api/v1/books/:id', getBookById);
     
