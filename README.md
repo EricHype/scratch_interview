@@ -38,18 +38,13 @@ The type of client for this API was never specified so I'm assuming dates can co
 # 4) Routes:
 
 (Single parameter search)
-/api/v1/books/author - Parameters: firstName, lastName
-/api/v1/books/title - Parameters: titleText
-/api/v1/books/content - Parameters: contentText
-/api/v1/books/metadata - Parameters: tags. Format should be: "key1:val1,key2:val2,..."
-/api/v1/books/category - Parameters: categories. Format should be: "CAT1,CAT2,CAT3"
-/api/v1/books/published_date - Parameters: publishedDate, operator. Format should be timestamp in millisecond and string operator ie: "=="
-
-
-
-
-
-
-
+- /api/v1/books/author - Parameters: firstName, lastName
+- /api/v1/books/title - Parameters: titleText
+- /api/v1/books/content - Parameters: contentText
+- /api/v1/books/metadata - Parameters: tags. Format should be: "key1:val1,key2:val2,..."
+- /api/v1/books/category - Parameters: categories. Format should be: "CAT1,CAT2,CAT3,..."
+- /api/v1/books/published_date - Parameters: publishedDate, operator. Format should be timestamp in millisecond and string operator ie: "=="
+- /api/v1/books/language - Parameters: languages. Format should be "LANG1,LANG2,..."
 
 (Multi parameter search)
+- /api/v1/books/search - Parameters: firstName, lastName, titleText, contentText, tags, categories, publishedDate, operator, languages, pageNumber, pageSize, limit, sortKeys. Formats are same as above, sortkeys should be in "column:asc,column2:desc" format.
