@@ -51,9 +51,9 @@ RAM of server and processor speed are also not defined, so I could technically a
 (Multi parameter search)
 - /api/v1/books/search - Parameters: firstName, lastName, titleText, contentText, tags, categories, publishedDate, operator, languages, pageNumber, pageSize, limit, sortKeys. Formats are same as above, sortkeys should be in "column:asc,column2:desc" format.
 
-# 5) Things still to do/code stuff I'm not that happy with.
+# 5) Things still to do/stuff I'm not that happy with.
 
-This implementation is laregly a brute force one, given the nebulous nature of the problem, which is massively inefficient. Seriously, it took me a full day of working on it and re-reading the problem before I finally figured out what Scratch was probably trying to have me code so they could evaluate. Sadly, by that time, I had already put a lot of hours into the single-parameter routes and the tests that go with them, so I ended up shorting what was probably the more important stuff they'd like to see in the multi-parameter route and backing repository. Really wish I had understood better or the problem was written more clearly.
+This implementation is laregly a brute force one, given the nebulous nature of the problem, which is massively inefficient. Seriously, it took me a full day of working on it and re-reading the problem before I finally figured out what Scratch was probably trying to have me code so they could evaluate. Sadly, by that time, I had already put a lot of hours into the single-parameter routes and the tests that go with them, so I ended up shorting what was probably the more important stuff they'd like to see in the multi-parameter route and backing repository. I really wish I had understood what was written better or the problem was written more clearly so I knew where to spend my time.
 
 The service class violated the single object responsibility principle, so I'd love to refactor that. Additionally, I'd like ot add in memory indexes on the collection for different columns to speed up searches. It's not hard to get a pretty decent speed gain over the simple iterate-over-whole-collection version I did as an initial implementation. 
 
@@ -61,4 +61,6 @@ Lastly, this is a solution that could greatly benefit from caching, particularly
 
 # 6) If this was to be deployed as a service
 
-Part of the problem is say what you wold do if this solution were to be deployed as a service that added 100 books per second and had to handle 50k searches per second. Flatly, I wouldn't ship anything like this to handle that problem. There are way better, well understood and industry standard tools like elasticsearch/solr that can handle something like this and the benefits of using them far outweigh the costs. HOwever, if I had to ship this
+Part of the problem is say what you wold do if this solution were to be deployed as a service that added 100 books per second and had to handle 50k searches per second. Flatly, I wouldn't ship anything like this to handle that problem. There are way better, well understood and industry standard tools like elasticsearch/solr that can handle something like this easily and the benefits of using them far outweigh the costs. 
+
+However, if I had to ship this type of solution, there are a number of things to consider. One would be how consistent the data needs to be and at what time (eventual consistency vs atomic). If inserts can be batched together so that index rebuilding etc can be taken on a less frequent schedule that would be a benefit. For searches, all code would need to be made non-blocking, the brute force methods I implemented wouldn't be able to keep up with that kind of load. As mentioned above, caching of query results would also be a boon, particularly if the pagination feature is heavily used.
