@@ -48,6 +48,8 @@ RAM of server and processor speed are also not defined, so I could technically a
 - /api/v1/books/category - Parameters: categories. Format should be: "CAT1,CAT2,CAT3,..."
 - /api/v1/books/published_date - Parameters: publishedDate, operator. Format should be timestamp in millisecond and string operator ie: "=="
 - /api/v1/books/language - Parameters: languages. Format should be "LANG1,LANG2,..."
+- /api/v1/books/:id
+- /api/v1/books
 
 (Multi parameter search)
 - /api/v1/books/search - Parameters: firstName, lastName, titleText, contentText, tags, categories, publishedDate, operator, languages, pageNumber, pageSize, limit, sortKeys. Formats are same as above, sortkeys should be in "column:asc,column2:desc" format.
