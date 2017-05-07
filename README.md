@@ -63,6 +63,6 @@ Lastly, this is a solution that could greatly benefit from caching, particularly
 
 # 6) If this was to be deployed as a service
 
-Part of the problem is say what you wold do if this solution were to be deployed as a service that added 100 books per second and had to handle 50k searches per second. Flatly, I wouldn't ship anything like this to handle that problem. There are way better, well understood and industry standard tools like elasticsearch/solr that can handle something like this easily and the benefits of using them far outweigh the costs. 
+Part of the problem is to say what you wold do if this solution were to be deployed as a service that added 100 books per second and had to handle 50k searches per second. Flatly, I wouldn't ship anything like this to handle that problem. There are way better, well understood and industry standard tools like elasticsearch/solr that can handle something like this easily and the benefits of using them far outweigh the costs. 
 
 However, if I had to ship this type of solution, there are a number of things to consider. One would be how consistent the data needs to be and at what time (eventual consistency vs atomic). If inserts can be batched together so that index rebuilding etc can be taken on a less frequent schedule that would be a benefit. For searches, all code would need to be made non-blocking, the brute force methods I implemented wouldn't be able to keep up with that kind of load. As mentioned above, caching of query results would also be a boon, particularly if the pagination feature is heavily used.
